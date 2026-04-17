@@ -1,64 +1,108 @@
-# 🇮🇳 Scheme Dekho — Government Scheme Portal
+# 🚀 SchemeDekho
 
-A beautiful, professional local website for discovering and checking eligibility for 138+ Indian government schemes.
+## 📌 Overview
 
-## 🚀 Quick Start
+**SchemeDekho** is a smart web-based platform designed to help users discover government schemes they are eligible for. By analyzing personal details such as age, income, occupation, gender, and location, the system provides tailored scheme recommendations quickly and efficiently.
 
-### 1. Install Python dependencies
+---
+
+## 🎯 Problem Statement
+
+Many citizens are unaware of government schemes they qualify for due to lack of centralized information and complex eligibility criteria. SchemeDekho solves this by simplifying access and providing personalized results.
+
+---
+
+## 💡 Solution
+
+SchemeDekho collects user inputs and matches them against predefined eligibility criteria of various government schemes to suggest the most relevant ones.
+
+---
+
+## ⚙️ Features
+
+* 🔍 Personalized scheme recommendations
+* 📊 Input-based filtering (age, income, occupation, gender, location)
+* ⚡ Fast and simple user interface
+* 📱 Responsive design for mobile and desktop
+* 🧠 Intelligent eligibility matching logic
+
+---
+
+## 🛠️ Tech Stack
+
+* **Frontend:** HTML, CSS, JavaScript
+* **Backend:** Python (Flask)
+* **Database:** (Optional – SQLite / JSON / MongoDB)
+
+---
+
+## 📥 Installation
+
+### 1. Clone the repository
+
 ```bash
-pip install flask
+git clone https://github.com/your-username/schemedekho.git
+cd schemedekho
 ```
 
-### 2. Set up the database (run once)
+### 2. Create virtual environment (optional but recommended)
+
 ```bash
-python seed_db.py
+python -m venv venv
+venv\Scripts\activate   # For Windows
 ```
 
-### 3. Start the website
+### 3. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Run the application
+
 ```bash
 python app.py
 ```
 
-### 4. Open in your browser
-```
-http://localhost:5000
-```
+###
+
+---
+
+## 🧪 Usage
+
+1. Enter your personal details (age, income, occupation, etc.)
+2. Click on **Check Eligibility**
+3. View recommended government schemes
 
 ---
 
 ## 📂 Project Structure
+
 ```
-scheme_dekho/
-├── app.py              ← Flask application (main server)
-├── seed_db.py          ← Database seeder (run once)
-├── requirements.txt
-├── database/
-│   └── schemes.db      ← SQLite database (auto-created)
-├── templates/
-│   ├── base.html       ← Shared layout & navbar
-│   ├── index.html      ← Home page
-│   ├── dashboard.html  ← Dashboard
-│   ├── schemes.html    ← Browse all schemes
-│   ├── scheme_detail.html ← Single scheme page
-│   ├── eligibility.html   ← Eligibility checker
-│   └── verifier.html      ← Scheme verifier
-└── static/
-    ├── css/style.css   ← All styles
-    └── js/main.js      ← Animations & interactions
+schemedekho/
+│── static/           # CSS, JS, Images
+│── templates/        # HTML files
+│── app.py            # Main Flask app
+│── requirements.txt  # Dependencies
+│── README.md         # Project documentation
 ```
 
-## ✨ Features
-- 🏠 **Stunning Home Page** — Animated hero, scheme ticker, category grid
-- 📊 **Dashboard** — KPIs, quick access, tools overview
-- 📋 **138+ Schemes** — Searchable, filterable by category
-- 🎯 **Eligibility Checker** — Enter age, income, caste, gender, BPL → instant matches
-- 🛡️ **Scheme Verifier** — Check if a scheme is real or fake
-- 🔗 **Official Links** — Direct link to gov.in for every scheme
-- 🌙 **Dark Theme** — India-inspired saffron + navy + gold
+##
 
-## 🛠️ Tech Stack
-- **Backend**: Python + Flask
-- **Database**: SQLite (SQL)
-- **Frontend**: HTML5 + CSS3 + Vanilla JS
-- **Fonts**: Syne (display) + Plus Jakarta Sans
-- **Icons**: Font Awesome 6
+---
+
+## 🙌 Acknowledgements
+
+* Government of India public scheme data
+* Open-source community
+
+---
+
+## 📧 Contact
+
+For queries or suggestions:
+📩 chintanhadiya83[@gmail.com](mailto:your-email@example.com)
+
+---
+
+⭐ If you like this project, don't forget to give it a star!
