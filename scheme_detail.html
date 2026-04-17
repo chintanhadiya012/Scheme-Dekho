@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% block title %}{{ scheme.name }}{% endblock %}
+{% block content %}
+<div class="page">
+<section class="section">
+<div class="section-inner">
+
+  <!-- Breadcrumb -->
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:2rem;font-size:0.82rem;color:var(--muted)" class="animate">
+    <a href="/schemes" style="color:var(--saffron)"><i class="fas fa-arrow-left"></i> Back to Schemes</a>
+    <span>/</span>
+    <a href="/schemes?category={{ scheme.category }}" style="color:var(--muted);text-decoration:underline">{{ scheme.category }}</a>
+    <span>/</span>
+    <span style="color:var(--white)">{{ scheme.name }}</span>
+  </div>
+
+  <!-- Hero Card -->
+  <div class="detail-hero animate">
+    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:1rem">
+      <div style="flex:1;min-width:260px">
+        <div class="scheme-cat-tag" style="margin-bottom:1rem">{{ scheme.category }}</div>
+        <h1 style="font-family:'Poppins', sans-serif;font-size:clamp(1.5rem,3vw,2.2rem);font-weight:800;line-height:1.2;margin-bottom:0.75rem">{{ scheme.name }}</h1>
+        <div style="color:var(--muted);font-size:0.9rem;margin-bottom:1.5rem"><i class="fas fa-landmark" style="margin-right:6px;opacity:.6"></i>{{ scheme.ministry }}</div>
+        <p style="color:#aab8d0;font-size:1rem;line-height:1.7;max-width:600px">{{ scheme.description }}</p>
+      </div>
+      <div>
+        {% if scheme.official_link %}
+        <a href="{{ scheme.official_link }}" target="_blank" class="btn btn-primary" style="margin-bottom:0.75rem;display:flex">
+          <i class="fas fa-external-link-alt"></i> Official Website
+        </a>
+        {% endif %}
+        <a href="/verifier?name={{ scheme.name | urlencode }}" class="btn btn-ghost" style="display:flex">
+          <i class="fas fa-shield-alt"></i> Verify This Scheme
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detail Grid -->
+  <div class="detail-grid">
+    <div>
+
+      <!-- Benefits -->
+      <div class="info-card animate" style="margin-bottom:1.5rem">
+        <h3><i class="fas fa-gift"></i> Benefits</h3>
+        <p style="color:#aab8d0;line-height:1.7">{{ scheme.benefits or 'Details available on official website.' }}</p>
+      </div>
+
+      <!-- Documents Required -->
+      <div class="info-card animate">
+        <h3><i class="fas fa-file-alt"></i> Documents Required</h3>
+        {% if scheme.documents %}
+        <ul style="list-style:none;padding:0">
+          {% for doc in scheme.documents.split(',') %}
+          <li style="padding:8px 0;border-bottom:1px solid var(--border);font-size:0.88rem;color:#aab8d0;display:flex;align-items:center;gap:8px">
+            <span style="color:var(--green-lt)">✓</span> {{ doc.strip() }}
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <p style="color:var(--muted);font-size:0.88rem">Check official website for required documents.</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Eligibility Sidebar -->
+    <div>
+      <div class="info-card animate" style="position:sticky;top:86px">
+        <h3><i class="fas fa-user-check"></i> Eligibility Criteria</h3>
+        <div class="info-row">
+          <span class="info-label">Minimum Age</span>
+          <span class="info-val">{{ scheme.min_age ~ ' years' if scheme.min_age else 'No limit' }}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Maximum Age</span>
+          <span class="info-val">{{ scheme.max_age ~ ' years' if scheme.max_age else 'No limit' }}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Annual Income Limit</span>
+          <span class="info-val">
+            {% if scheme.max_income %}
+              ₹{{ '{:,}'.format(scheme.max_income) }}
+            {% else %}No limit{% endif %}
+          </span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Gender</span>
+          <span class="info-val">{{ scheme.gender_required or 'All' }}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Caste Category</span>
+          <span class="info-val">{{ scheme.caste_required or 'All' }}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">BPL Card Required</span>
+          <span class="info-val" style="color:{{ 'var(--saffron)' if scheme.bpl_required else 'var(--green-lt)' }}">
+            {{ 'Yes' if scheme.bpl_required else 'No' }}
+          </span>
+        </div>
+        <div style="margin-top:1.25rem">
+          <a href="/eligibility" class="btn btn-primary" style="width:100%;justify-content:center;display:flex">
+            <i class="fas fa-check-circle"></i> Check My Eligibility
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Back button -->
+  <div style="margin-top:2rem" class="animate">
+    <a href="/schemes?category={{ scheme.category }}" class="btn btn-ghost">
+      <i class="fas fa-th-large"></i> More {{ scheme.category }} Schemes
+    </a>
+  </div>
+
+</div>
+</section>
+</div>
+{% endblock %}

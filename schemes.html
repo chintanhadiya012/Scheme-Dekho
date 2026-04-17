@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Browse Schemes{% endblock %}
+{% block content %}
+<div class="page">
+<section class="section">
+<div class="section-inner">
+  <div style="margin-bottom:2rem">
+    <div class="section-badge animate">📋 All Schemes</div>
+    <h1 class="section-title animate">Government Schemes</h1>
+    <p class="section-desc animate">Search and filter through 170+ central government schemes.</p>
+  </div>
+
+  <!-- Filter Bar -->
+  <form method="get" class="filter-bar animate">
+    <input class="filter-input" name="q" placeholder="🔍  Search scheme name or description..." value="{{ query }}">
+    <select class="filter-select" name="category" onchange="this.form.submit()">
+      <option value="">All Categories</option>
+      {% for cat in categories %}
+      <option value="{{ cat }}" {% if cat==selected_cat %}selected{% endif %}>{{ cat }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit" class="btn btn-primary" style="white-space:nowrap"><i class="fas fa-search"></i> Search</button>
+    {% if query or selected_cat %}
+    <a href="/schemes" class="btn btn-ghost"><i class="fas fa-times"></i> Clear</a>
+    {% endif %}
+  </form>
+
+  <!-- Results count -->
+  <div class="results-count animate">
+    <span>{{ schemes|length }}</span> scheme{{ 's' if schemes|length != 1 else '' }} found
+    {% if selected_cat %} in <span>{{ selected_cat }}</span>{% endif %}
+    {% if query %} matching "<span>{{ query }}</span>"{% endif %}
+  </div>
+
+  {% if schemes %}
+  <div class="schemes-grid">
+    {% for s in schemes %}
+    <div class="scheme-card animate">
+      <div>
+        <div class="scheme-cat-tag">{{ s.category }}</div>
+        <div class="scheme-name">{{ s.name }}</div>
+        <div class="scheme-ministry"><i class="fas fa-landmark" style="opacity:.5;margin-right:4px"></i>{{ s.ministry }}</div>
+        <div class="scheme-desc">{{ s.description }}</div>
+      </div>
+      <div class="scheme-footer">
+        <div class="scheme-tags">
+          {% if s.bpl_required %}<span class="tag red">BPL Required</span>{% endif %}
+          {% if s.gender_required and s.gender_required != 'All' %}<span class="tag accent">{{ s.gender_required }}</span>{% endif %}
+          {% if s.caste_required and s.caste_required != 'All' %}<span class="tag">{{ s.caste_required }}</span>{% endif %}
+          {% if not s.bpl_required and (not s.gender_required or s.gender_required=='All') and (not s.caste_required or s.caste_required=='All') %}<span class="tag">For All</span>{% endif %}
+        </div>
+        <div class="scheme-actions">
+          <a href="/scheme/{{ s.id }}" class="btn btn-ghost" style="padding:8px 12px;font-size:0.78rem">Details</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="no-results animate">
+    <i class="fas fa-search-minus"></i>
+    <h3 style="font-family:'Poppins', sans-serif;font-weight:700;margin-bottom:0.5rem">No schemes found</h3>
+    <p>Try a different search term or category.</p>
+    <a href="/schemes" class="btn btn-ghost" style="margin-top:1.5rem">Clear Filters</a>
+  </div>
+  {% endif %}
+
+</div>
+</section>
+</div>
+{% endblock %}

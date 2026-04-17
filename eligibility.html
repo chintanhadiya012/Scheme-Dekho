@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+{% block title %}Eligibility Checker{% endblock %}
+{% block content %}
+<div class="page">
+<section class="section">
+<div class="section-inner">
+  <div style="max-width:1100px;margin:0 auto">
+    <div class="section-badge animate">🎯 Eligibility</div>
+    <h1 class="section-title animate">Find Schemes <span style="color:var(--saffron)">For You</span></h1>
+    <p class="section-desc animate">Enter your details to instantly discover all government schemes you qualify for.</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start" id="mainGrid">
+
+      <!-- FORM -->
+      <div class="elig-form animate">
+        <h2 style="font-family:'Poppins', sans-serif;font-weight:800;font-size:1.1rem;margin-bottom:1.75rem;display:flex;align-items:center;gap:8px">
+          <span style="color:var(--saffron)">📝</span> Your Profile
+        </h2>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Age (years)</label>
+            <input type="number" class="form-input" id="age" placeholder="e.g. 35" min="0" max="120">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Annual Income (₹)</label>
+            <input type="number" class="form-input" id="income" placeholder="e.g. 150000" min="0">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Gender</label>
+            <select class="form-select" id="gender">
+              <option value="">Select Gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Caste Category</label>
+            <select class="form-select" id="caste">
+              <option value="general">General</option>
+              <option value="obc">OBC</option>
+              <option value="sc">SC</option>
+              <option value="st">ST</option>
+              <option value="minority">Minority</option>
+            </select>
+          </div>
+          <div class="form-group full">
+            <label class="form-label">State (optional)</label>
+            <select class="form-select" id="state">
+              <option value="">Select State</option>
+              <option>Gujarat</option><option>Maharashtra</option><option>Rajasthan</option>
+              <option>Uttar Pradesh</option><option>Bihar</option><option>West Bengal</option>
+              <option>Tamil Nadu</option><option>Karnataka</option><option>Kerala</option>
+              <option>Madhya Pradesh</option><option>Andhra Pradesh</option><option>Telangana</option>
+              <option>Punjab</option><option>Haryana</option><option>Odisha</option>
+              <option>Jharkhand</option><option>Chhattisgarh</option><option>Assam</option>
+              <option>Delhi</option><option>Other</option>
+            </select>
+          </div>
+          <div class="form-group full">
+            <div class="checkbox-group">
+              <input type="checkbox" id="bpl">
+              <label for="bpl" style="font-size:0.92rem;cursor:pointer">
+                <strong>BPL Card Holder</strong>
+                <span style="color:var(--muted);font-size:0.8rem;display:block">Below Poverty Line card</span>
+              </label>
+            </div>
+          </div>
+          <div class="form-group full">
+            <div class="checkbox-group">
+              <input type="checkbox" id="farmer">
+              <label for="farmer" style="font-size:0.92rem;cursor:pointer">
+                <strong>Farmer / Land Owner</strong>
+              </label>
+            </div>
+          </div>
+          <div class="form-group full">
+            <div class="checkbox-group">
+              <input type="checkbox" id="disabled">
+              <label for="disabled" style="font-size:0.92rem;cursor:pointer">
+                <strong>Person with Disability</strong>
+              </label>
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-primary" style="width:100%;margin-top:1.5rem;justify-content:center;font-size:1rem;padding:15px" onclick="checkEligibility()">
+          <i class="fas fa-search"></i> Find My Schemes
+        </button>
+      </div>
+
+      <!-- RESULTS -->
+      <div id="resultsPanel">
+        <div style="text-align:center;padding:4rem 2rem;color:var(--muted)">
+          <div style="font-size:4rem;margin-bottom:1rem;opacity:.3">🎯</div>
+          <p style="font-size:0.9rem">Fill in your profile and click <strong style="color:var(--white)">"Find My Schemes"</strong> to see matching schemes.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</section>
+</div>
+
+{% block scripts %}
+<script>
+async function checkEligibility() {
+  const btn = document.querySelector('[onclick="checkEligibility()"]');
+  btn.innerHTML = '<div class="spinner" style="width:20px;height:20px;margin:0;border-width:2px"></div> Searching...';
+  btn.disabled = true;
+
+  const payload = {
+    age:    parseInt(document.getElementById('age').value) || 0,
+    income: parseInt(document.getElementById('income').value) || 0,
+    gender: document.getElementById('gender').value,
+    caste:  document.getElementById('caste').value,
+    bpl:    document.getElementById('bpl').checked,
+  };
+
+  try {
+    const res  = await fetch('/api/check_eligibility', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    renderResults(data);
+  } catch(e) {
+    document.getElementById('resultsPanel').innerHTML = '<p style="color:#ff7070">Error fetching results. Please try again.</p>';
+  }
+
+  btn.innerHTML = '<i class="fas fa-search"></i> Find My Schemes';
+  btn.disabled = false;
+}
+
+function renderResults(data) {
+  const panel = document.getElementById('resultsPanel');
+  if (!data.schemes.length) {
+    panel.innerHTML = `
+      <div class="no-results" style="padding:3rem 1rem">
+        <i class="fas fa-search-minus" style="font-size:2.5rem;display:block;margin-bottom:1rem;opacity:.4"></i>
+        <h3 style="font-family:'Poppins', sans-serif;font-weight:700;margin-bottom:0.5rem">No schemes matched</h3>
+        <p style="font-size:0.85rem">Try adjusting your profile or <a href="/schemes" style="color:var(--saffron)">browse all schemes</a>.</p>
+      </div>`;
+    return;
+  }
+
+  // Group by category
+  const groups = {};
+  data.schemes.forEach(s => {
+    if (!groups[s.category]) groups[s.category] = [];
+    groups[s.category].push(s);
+  });
+
+  let html = `
+    <div style="margin-bottom:1.5rem">
+      <div style="font-family:'Poppins', sans-serif;font-size:1.4rem;font-weight:800">
+        <span style="color:var(--saffron)">${data.count}</span> schemes matched
+      </div>
+      <div style="font-size:0.82rem;color:var(--muted)">Based on your profile</div>
+    </div>
+    <div style="max-height:70vh;overflow-y:auto;padding-right:4px">`;
+
+  for (const [cat, schemes] of Object.entries(groups)) {
+    html += `<div style="margin-bottom:1.25rem">
+      <div style="font-size:0.78rem;font-weight:700;color:var(--accent);letter-spacing:.06em;text-transform:uppercase;margin-bottom:0.6rem;display:flex;align-items:center;gap:6px">
+        <span>${cat}</span><span style="background:rgba(240,192,64,.15);border-radius:4px;padding:1px 7px">${schemes.length}</span>
+      </div>`;
+    schemes.forEach(s => {
+      html += `
+        <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:0.6rem;transition:all .3s ease">
+          <div style="font-family:'Poppins', sans-serif;font-weight:700;font-size:0.9rem;margin-bottom:4px">${s.name}</div>
+          <div style="font-size:0.78rem;color:var(--muted)">${s.description}</div>
+          <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:0.75rem">
+            <a href="/scheme/${s.id}" class="btn btn-ghost" style="padding:8px 12px;font-size:0.78rem">Details</a>
+          </div>
+        </div>`;
+    });
+    html += '</div>';
+  }
+  html += '</div>';
+  panel.innerHTML = html;
+}
+</script>
+{% endblock %}
+{% endblock %}

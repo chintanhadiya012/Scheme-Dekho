@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% block title %}Scheme Verifier{% endblock %}
+{% block content %}
+<div class="page">
+<section class="section">
+<div class="section-inner" style="max-width:780px;margin:0 auto">
+
+  <div class="section-badge animate">🛡️ Verification</div>
+  <h1 class="section-title animate">Scheme Verifier</h1>
+  <p class="section-desc animate">
+    Protect yourself from fraud. Enter the name of any government scheme to check if it's genuine and listed in our database.
+  </p>
+
+  <!-- Warning Box -->
+  <div class="animate" style="background:rgba(255,180,0,0.07);border:1px solid rgba(255,180,0,0.2);border-radius:var(--radius);padding:1.25rem 1.5rem;margin-bottom:2rem;display:flex;gap:12px;align-items:flex-start">
+    <span style="font-size:1.4rem;flex-shrink:0">⚠️</span>
+    <div>
+      <div style="font-weight:600;font-size:0.9rem;color:var(--accent);margin-bottom:4px">Beware of Fake Schemes</div>
+      <div style="font-size:0.82rem;color:var(--muted)">Fraudsters often use government names to deceive citizens. If any scheme asks for payment, OTP, or Aadhaar over phone — it may be a scam. Always verify at official gov.in websites.</div>
+    </div>
+  </div>
+
+  <!-- Verifier Card -->
+  <div class="elig-form animate" style="max-width:100%">
+    <h2 style="font-family:'Poppins', sans-serif;font-weight:800;font-size:1.05rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:8px">
+      <span style="color:var(--saffron)">🔍</span> Enter Scheme Name
+    </h2>
+    <div style="display:flex;gap:1rem;flex-wrap:wrap">
+      <input type="text" class="form-input" id="schemeName" placeholder="e.g. PM Kisan, Ayushman Bharat..." style="flex:1;min-width:200px">
+      <button class="btn btn-green" onclick="verifyScheme()" id="verifyBtn">
+        <i class="fas fa-shield-alt"></i> Verify
+      </button>
+    </div>
+    <div id="verifyResult"></div>
+  </div>
+
+  <!-- Tips -->
+  <div class="info-card animate" style="margin-top:2rem">
+    <h3 style="color:var(--saffron)"><i class="fas fa-lightbulb"></i> How to Stay Safe</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:0.5rem">
+      {% for icon, tip in [
+        ("✅","All real schemes are on gov.in websites"),
+        ("❌","No real scheme asks for payment via phone"),
+        ("✅","Look for .gov.in in the URL"),
+        ("❌","Don't share OTP with anyone for 'schemes'"),
+        ("✅","Verify scheme name on this portal"),
+        ("❌","Avoid clicking links in WhatsApp messages"),
+      ] %}
+      <div style="display:flex;gap:8px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--border)">
+        <span style="font-size:1rem;flex-shrink:0">{{ icon }}</span>
+        <span style="font-size:0.83rem;color:var(--muted)">{{ tip }}</span>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+</div>
+</section>
+</div>
+
+{% block scripts %}
+<script>
+document.getElementById('schemeName').addEventListener('keydown', e => {
+  if (e.key === 'Enter') verifyScheme();
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const nameParam = urlParams.get('name');
+  if (nameParam) {
+    document.getElementById('schemeName').value = nameParam;
+    verifyScheme();
+  }
+});
+
+async function verifyScheme() {
+  const name = document.getElementById('schemeName').value.trim();
+  if (!name) return;
+
+  const btn = document.getElementById('verifyBtn');
+  btn.innerHTML = '<div class="spinner" style="width:18px;height:18px;margin:0;border-width:2px"></div>';
+  btn.disabled = true;
+
+  try {
+    const res  = await fetch('/api/verify_scheme', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({name})
+    });
+    const data = await res.json();
+
+    const box = document.getElementById('verifyResult');
+    if (data.found) {
+      let items = data.schemes.map(s => `
+        <li>
+          <div>
+            <div style="font-weight:600;font-size:0.9rem">${s.name}</div>
+            <div style="font-size:0.78rem;color:var(--muted)">${s.category} • ${s.ministry}</div>
+          </div>
+          <div style="display:flex;gap:8px;flex-shrink:0">
+            <a href="/scheme/${s.id}" class="btn btn-ghost" style="padding:6px 12px;font-size:0.78rem">Details</a>
+            ${s.official_link ? `<a href="${s.official_link}" target="_blank" class="btn btn-green" style="padding:6px 12px;font-size:0.78rem"><i class="fas fa-external-link-alt"></i> Official</a>` : ''}
+          </div>
+        </li>`).join('');
+
+      box.innerHTML = `
+        <div class="verifier-result found">
+          <div class="result-status ok">✅ Scheme Verified — It's Real!</div>
+          <p style="font-size:0.83rem;color:var(--muted);margin-bottom:1rem">${data.schemes.length} matching scheme(s) found in our database:</p>
+          <ul class="result-list">${items}</ul>
+        </div>`;
+    } else {
+      box.innerHTML = `
+        <div class="verifier-result not-found">
+          <div class="result-status fail">❌ Scheme Not Found</div>
+          <p style="font-size:0.85rem;color:#ff7070;margin-bottom:0.75rem">"${name}" was not found in our database.</p>
+          <p style="font-size:0.82rem;color:var(--muted)">This could mean: (1) The scheme name is misspelled, (2) It doesn't exist, or (3) It may be a <strong>fake/fraudulent scheme</strong>. Do NOT pay money or share personal details for this scheme. <a href="/schemes" style="color:var(--saffron)">Browse verified schemes →</a></p>
+        </div>`;
+    }
+  } catch(e) {
+    document.getElementById('verifyResult').innerHTML = '<p style="color:#ff7070;margin-top:1rem">Error. Please try again.</p>';
+  }
+
+  btn.innerHTML = '<i class="fas fa-shield-alt"></i> Verify';
+  btn.disabled = false;
+}
+</script>
+{% endblock %}
+{% endblock %}

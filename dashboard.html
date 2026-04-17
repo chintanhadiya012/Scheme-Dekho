@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="page">
+<section class="section">
+<div class="section-inner">
+  <div class="dash-header">
+    <div>
+      <div class="section-badge">📊 Overview</div>
+      <h1 class="section-title" style="margin-bottom:0.25rem">Scheme Dashboard</h1>
+      <p style="color:var(--muted);font-size:0.9rem">Real-time overview of all government schemes</p>
+    </div>
+    <a href="/schemes" class="btn btn-primary"><i class="fas fa-search"></i> Browse All Schemes</a>
+  </div>
+
+  <!-- KPIs -->
+  <div class="stats-row">
+    <div class="kpi-card animate">
+      <div class="kpi-icon">📋</div>
+      <div class="kpi-num" data-target="{{ total }}">0</div>
+      <div class="kpi-label">Total Schemes</div>
+    </div>
+    <div class="kpi-card animate">
+      <div class="kpi-icon">📂</div>
+      <div class="kpi-num" data-target="{{ categories|length }}">0</div>
+      <div class="kpi-label">Categories</div>
+    </div>
+    <div class="kpi-card animate">
+      <div class="kpi-icon">🏛️</div>
+      <div class="kpi-num" data-target="30">0</div>
+      <div class="kpi-label">Ministries</div>
+    </div>
+    <div class="kpi-card animate">
+      <div class="kpi-icon">👤</div>
+      <div class="kpi-num" data-target="140">0</div>
+      <div class="kpi-label">Crore Beneficiaries</div>
+    </div>
+    <div class="kpi-card animate">
+      <div class="kpi-icon">💰</div>
+      <div class="kpi-num" data-target="45">0</div>
+      <div class="kpi-label">Lakh Cr Budget (2024)</div>
+    </div>
+  </div>
+
+  <!-- Quick Access Grid -->
+  <div class="section-badge animate" style="margin-bottom:1.25rem">🚀 Quick Access</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;margin-bottom:3rem">
+    {% for cat, icon in [
+      ("Agriculture","🌾"),("Health","🏥"),("Education","📚"),("Housing","🏠"),
+      ("Employment","💼"),("Women & Child","👩‍👧"),("Social Security","🛡️"),("Financial","💰"),
+      ("SC/ST","⚖️"),("Disability","♿"),("Energy","⚡"),("Digital","💻"),
+      ("Business","🏭"),("Sanitation","🚿"),("OBC Welfare","🤝"),("Senior Citizens","👴"),
+      ("Rural","🌿"),("Minority","🕌"),
+    ] %}
+    <a href="/schemes?category={{ cat }}" class="cat-card animate" style="padding:1.2rem">
+      <span style="font-size:1.8rem">{{ icon }}</span>
+      <div class="cat-name" style="margin-top:0.5rem">{{ cat }}</div>
+    </a>
+    {% endfor %}
+  </div>
+
+  <!-- Action Cards -->
+  <div class="section-badge animate" style="margin-bottom:1.25rem">⚡ Tools</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.25rem">
+
+    <a href="/eligibility" class="info-card animate" style="text-decoration:none;background:linear-gradient(135deg,rgba(255,107,26,0.1),rgba(255,107,26,0.04));border-color:rgba(255,107,26,0.25)">
+      <div style="font-size:2.5rem;margin-bottom:1rem">🎯</div>
+      <h3 style="font-family:'Poppins', sans-serif;font-weight:800;font-size:1.1rem;margin-bottom:0.5rem;color:var(--white)">Eligibility Checker</h3>
+      <p style="font-size:0.85rem;color:var(--muted);margin-bottom:1.25rem">Enter your profile and instantly see which schemes you qualify for.</p>
+      <span class="btn btn-primary" style="font-size:0.82rem;padding:10px 18px"><i class="fas fa-arrow-right"></i> Check Now</span>
+    </a>
+
+    <a href="/verifier" class="info-card animate" style="text-decoration:none;background:linear-gradient(135deg,rgba(19,136,8,0.1),rgba(19,136,8,0.03));border-color:rgba(19,136,8,0.25)">
+      <div style="font-size:2.5rem;margin-bottom:1rem">🛡️</div>
+      <h3 style="font-family:'Poppins', sans-serif;font-weight:800;font-size:1.1rem;margin-bottom:0.5rem;color:var(--white)">Scheme Verifier</h3>
+      <p style="font-size:0.85rem;color:var(--muted);margin-bottom:1.25rem">Suspect a fake scheme? Verify if it's real in our database.</p>
+      <span class="btn btn-green" style="font-size:0.82rem;padding:10px 18px"><i class="fas fa-shield-alt"></i> Verify Scheme</span>
+    </a>
+
+    <a href="/schemes" class="info-card animate" style="text-decoration:none;background:linear-gradient(135deg,rgba(240,192,64,0.08),rgba(240,192,64,0.02));border-color:rgba(240,192,64,0.2)">
+      <div style="font-size:2.5rem;margin-bottom:1rem">📋</div>
+      <h3 style="font-family:'Poppins', sans-serif;font-weight:800;font-size:1.1rem;margin-bottom:0.5rem;color:var(--white)">All Schemes</h3>
+      <p style="font-size:0.85rem;color:var(--muted);margin-bottom:1.25rem">Browse the complete list of {{ total }}+ central government schemes.</p>
+      <span class="btn btn-accent" style="font-size:0.82rem;padding:10px 18px"><i class="fas fa-list"></i> Browse All</span>
+    </a>
+
+  </div>
+</div>
+</section>
+</div>
+{% endblock %}

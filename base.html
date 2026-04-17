@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}Scheme Dekho{% endblock %} — India's Scheme Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<!-- Cursor glow -->
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<!-- Government Background -->
+<div class="gov-bg"></div>
+
+<!-- Noise overlay -->
+<div class="noise-overlay"></div>
+
+<!-- NAV -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <div class="logo-text">
+        <span class="logo-main">Scheme <em>Dekho</em></span>
+        <span class="logo-sub">सरकारी योजना पोर्टल</span>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="/" class="nav-link {% if request.endpoint=='home' %}active{% endif %}">Home</a>
+      <a href="/dashboard" class="nav-link {% if request.endpoint=='dashboard' %}active{% endif %}">Dashboard</a>
+      <a href="/schemes" class="nav-link {% if request.endpoint=='schemes' %}active{% endif %}">Schemes</a>
+      <a href="/eligibility" class="nav-link {% if request.endpoint=='eligibility' %}active{% endif %}">Eligibility</a>
+      <a href="/verifier" class="nav-link {% if request.endpoint=='verifier' %}active{% endif %}">Verifier</a>
+    </div>
+    <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="/">Home</a>
+    <a href="/dashboard">Dashboard</a>
+    <a href="/schemes">Schemes</a>
+    <a href="/eligibility">Eligibility</a>
+    <a href="/verifier">Verifier</a>
+  </div>
+</nav>
+
+{% block content %}{% endblock %}
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div>
+        <div class="footer-title">Scheme Dekho</div>
+        <div class="footer-tagline">Empowering Every Citizen</div>
+      </div>
+    </div>
+    <div class="footer-links">
+      <a href="/schemes">Browse Schemes</a>
+      <a href="/eligibility">Check Eligibility</a>
+      <a href="/verifier">Scheme Verifier</a>
+    </div>
+    <div class="footer-note">
+      <p>Data sourced from official Government of India portals.</p>
+      <p>© 2024 Scheme Dekho — For informational purposes only.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

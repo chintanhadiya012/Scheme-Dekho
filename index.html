@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<div class="page">
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="dot"></span>
+        170+ Government Schemes • Updated 2024
+      </div>
+      <h1 class="hero-title">
+        Find Every<br>
+        <span class="line-saffron">Sarkari Yojana</span><br>
+        <span class="line-accent">Made For You</span>
+      </h1>
+      <p class="hero-desc">
+        One portal for all central government schemes. Check your eligibility, explore benefits, and access official links — all in one place.
+      </p>
+      <div class="hero-actions">
+        <a href="/eligibility" class="btn btn-primary">
+          <i class="fas fa-search"></i> Check My Eligibility
+        </a>
+        <a href="/schemes" class="btn btn-ghost">
+          <i class="fas fa-th-large"></i> Browse All Schemes
+        </a>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-card animate">
+        <div class="stat-icon"><i class="fas fa-clipboard-list"></i></div>
+        <div class="stat-info">
+          <div class="stat-num" data-target="{{ total_schemes }}">0</div>
+          <div class="stat-label">Government Schemes Listed</div>
+        </div>
+      </div>
+      <div class="stat-card animate">
+        <div class="stat-icon"><i class="fas fa-landmark"></i></div>
+        <div class="stat-info">
+          <div class="stat-num" data-target="{{ categories }}">0</div>
+          <div class="stat-label">Categories</div>
+        </div>
+      </div>
+      <div class="stat-card animate">
+        <div class="stat-icon"><i class="fas fa-users"></i></div>
+        <div class="stat-info">
+          <div class="stat-num" data-target="140">0</div>
+          <div class="stat-label">Crore Beneficiaries</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-track">
+    <div class="ticker-item"><span class="dot">•</span> PM Kisan Samman Nidhi — ₹6000/year for farmers</div>
+    <div class="ticker-item"><span class="dot">•</span> Ayushman Bharat — ₹5 lakh health cover</div>
+    <div class="ticker-item"><span class="dot">•</span> PM Awas Yojana — Affordable housing for all</div>
+    <div class="ticker-item"><span class="dot">•</span> PM Ujjwala — Free LPG connections</div>
+    <div class="ticker-item"><span class="dot">•</span> Sukanya Samriddhi — 8.2% savings for girls</div>
+    <div class="ticker-item"><span class="dot">•</span> PM Mudra Yojana — Business loans up to ₹10 lakh</div>
+    <div class="ticker-item"><span class="dot">•</span> MGNREGA — 100 days guaranteed employment</div>
+    <div class="ticker-item"><span class="dot">•</span> PM Kisan Samman Nidhi — ₹6000/year for farmers</div>
+    <div class="ticker-item"><span class="dot">•</span> Ayushman Bharat — ₹5 lakh health cover</div>
+    <div class="ticker-item"><span class="dot">•</span> PM Awas Yojana — Affordable housing for all</div>
+    <div class="ticker-item"><span class="dot">•</span> PM Ujjwala — Free LPG connections</div>
+    <div class="ticker-item"><span class="dot">•</span> Sukanya Samriddhi — 8.2% savings for girls</div>
+    <div class="ticker-item"><span class="dot">•</span> PM Mudra Yojana — Business loans up to ₹10 lakh</div>
+    <div class="ticker-item"><span class="dot">•</span> MGNREGA — 100 days guaranteed employment</div>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<section class="section">
+  <div class="tricolor-line" style="margin-bottom:3rem;border-radius:4px;opacity:0.5"></div>
+  <div class="section-inner">
+    <div class="section-badge animate">📂 Browse by Category</div>
+    <h2 class="section-title animate">Every Scheme,<br>Every Category</h2>
+    <p class="section-desc animate">From agriculture to digital India — find schemes across all sectors of government support.</p>
+    <div class="cat-grid">
+      {% set cats = [
+        ("Agriculture","🌾","Farmer support & crop schemes"),
+        ("Health","🏥","Healthcare & medical schemes"),
+        ("Education","📚","Scholarships & skill development"),
+        ("Housing","🏠","Housing assistance & loans"),
+        ("Employment","💼","Jobs, MGNREGA & skill training"),
+        ("Women & Child","👩‍👧","Maternity, girl child & nutrition"),
+        ("Social Security","🛡️","Pension & insurance"),
+        ("Financial","💰","Banking & investment schemes"),
+        ("SC/ST","⚖️","SC/ST welfare schemes"),
+        ("OBC Welfare","🤝","OBC scholarships & loans"),
+        ("Minority","🕌","Minority welfare schemes"),
+        ("Disability","♿","Support for disabled persons"),
+        ("Senior Citizens","👴","Old age welfare schemes"),
+        ("Energy","⚡","Solar, LPG & electrification"),
+        ("Digital","💻","Digital India initiatives"),
+        ("Business","🏭","MSME & startup support"),
+        ("Sanitation","🚿","Water & sanitation schemes"),
+        ("Rural","🌿","Rural development"),
+        ("Animal Husbandry","🐄","Livestock & dairy farming"),
+        ("Fisheries","🐟","Support for fish farmers"),
+        ("Law & Justice","🏛️","Free legal aid & support"),
+        ("Aviation","🛫","Air connectivity & travel"),
+        ("Tourism","🗺️","Travel & heritage preservation"),
+        ("Science & Tech","🔬","Research & innovation grants"),
+        ("Veterans","🎖️","Armed forces & veteran support"),
+        ("Handicrafts","🧶","Support for traditional artisans"),
+        ("Export & Trade","🚢","Boost for local exporters"),
+        ("Urban Dev","🏙️","Urban infrastructure schemes"),
+        ("Disaster Relief","🆘","Support during calamities"),
+        ("Space & Tech","🚀","ISRO and space initiatives"),
+        ("Self Help Groups","🤝","SHG credit and support"),
+        ("Khadi & Coir","🧵","Village industries"),
+        ("Ayush","🌿","Traditional medicine & yoga"),
+        ("Youth Affairs","🏃","Youth development"),
+        ("Food Processing","🥫","Mega food parks & subsidies"),
+      ] %}
+      {% for name, icon, desc in cats %}
+      <a href="/schemes?category={{ name }}" class="cat-card animate">
+        <span class="cat-icon">{{ icon }}</span>
+        <div class="cat-name">{{ name }}</div>
+        <div class="cat-count">{{ desc }}</div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section" style="background:linear-gradient(180deg,transparent,rgba(255,107,26,0.04),transparent)">
+  <div class="section-inner">
+    <div class="section-badge animate">⚡ How It Works</div>
+    <h2 class="section-title animate">3 Simple Steps</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem;margin-top:2rem">
+      {% for step, icon, title, desc in [
+        ("01","🎯","Enter Your Profile","Add your age, income, caste, gender and BPL status"),
+        ("02","🔍","Get Matched Schemes","Our engine matches 170+ schemes to your profile instantly"),
+        ("03","✅","Apply with Official Link","Click any scheme for full details and official government link"),
+      ] %}
+      <div class="info-card animate" style="text-align:center;position:relative;overflow:hidden">
+        <div style="font-family:'Poppins', sans-serif;font-size:4rem;font-weight:900;color:rgba(255,107,26,0.06);position:absolute;top:-10px;right:16px;line-height:1">{{ step }}</div>
+        <div style="font-size:2.5rem;margin-bottom:1rem">{{ icon }}</div>
+        <h3 style="font-family:'Poppins', sans-serif;font-weight:700;font-size:1.05rem;margin-bottom:0.5rem">{{ title }}</h3>
+        <p style="font-size:0.85rem;color:var(--muted)">{{ desc }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section">
+  <div class="section-inner">
+    <div class="info-card animate" style="text-align:center;padding:3.5rem;background:linear-gradient(135deg,rgba(255,107,26,0.08),rgba(240,192,64,0.05));border-color:rgba(255,107,26,0.25)">
+      <div style="font-size:3rem;margin-bottom:1rem">🇮🇳</div>
+      <h2 style="font-family:'Poppins', sans-serif;font-size:clamp(1.6rem,3vw,2.2rem);font-weight:800;margin-bottom:1rem">
+        Are you getting all the benefits <span style="color:var(--saffron)">you deserve?</span>
+      </h2>
+      <p style="color:var(--muted);margin-bottom:2rem;max-width:500px;margin-left:auto;margin-right:auto">
+        Millions of Indians miss out on government schemes they qualify for. Check your eligibility now — it's free.
+      </p>
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+        <a href="/eligibility" class="btn btn-primary"><i class="fas fa-check-circle"></i> Check Eligibility Now</a>
+        <a href="/verifier" class="btn btn-ghost"><i class="fas fa-shield-alt"></i> Verify a Scheme</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div>
+{% endblock %}
